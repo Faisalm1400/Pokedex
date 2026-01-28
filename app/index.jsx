@@ -22,7 +22,6 @@ export default function Index() {
     try {
       const response = await fetch('https://pokeapi.co/api/v2/pokemon/?limit=10')
       const data = await response.json();
-      // console.log(data.results)
 
       const basicPokemons = await Promise.all(
         data.results.map(async (p) => {
@@ -81,7 +80,7 @@ export default function Index() {
                 {item.types.map((t, i) => (
                   <Text
                     key={i}
-                    className="text-white text-xs bg-white/30 rounded-full px-2 py-1 mt-1 text-center"
+                    className="text-white text-xs bg-white/30 rounded-full px-2 py-1 mt-1 text-center capitalize"
                   >
                     {t.type.name}
                   </Text>
