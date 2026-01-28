@@ -15,6 +15,7 @@ export default function RootLayout() {
         }}
       />
       <Drawer.Screen name='pokedexInfo' options={{ title: 'Pokédex Info' }} />
+      <Drawer.Screen name='pokemon/[id]' options={{ title: 'Pokémon Details', drawerItemStyle: { display: "none" } }} />
     </Drawer>
   );
 }

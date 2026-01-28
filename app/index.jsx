@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Text, TextInput, View, FlatList, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import gradientByType from "../components/bgGradient";
+import { Link } from "expo-router";
 
 
 
@@ -65,29 +66,34 @@ export default function Index() {
         keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
           <View className="w-1/2 p-1">
-            <LinearGradient
-              colors={getBg(item)}
-              className="rounded-xl overflow-hidden p-4 flex-row items-center"
-            >
-              <View>
-                <Text className="text-white font-bold">
-                  #{item.id}
-                </Text>
-                <Text className="capitalize text-white text-lg font-bold">
-                  {item.name}
-                </Text>
-
-                {item.types.map((t, i) => (
-                  <Text
-                    key={i}
-                    className="text-white text-xs bg-white/30 rounded-full px-2 py-1 mt-1 text-center capitalize"
-                  >
-                    {t.type.name}
+            <Link href={{
+              pathname:'/pokemon/[id]',
+              params: {id: item.id}
+            }}>
+              <LinearGradient
+                colors={getBg(item)}
+                className="rounded-xl overflow-hidden p-4 flex-row items-center"
+              >
+                <View>
+                  <Text className="text-white font-bold">
+                    #{item.id}
                   </Text>
-                ))}
-              </View>
-              <Image source={{ uri: item.image }} className="w-28 h-28" />
-            </LinearGradient>
+                  <Text className="capitalize text-white text-lg font-bold">
+                    {item.name}
+                  </Text>
+
+                  {item.types.map((t, i) => (
+                    <Text
+                      key={i}
+                      className="text-white text-xs bg-white/30 rounded-full px-2 py-1 mt-1 text-center capitalize"
+                    >
+                      {t.type.name}
+                    </Text>
+                  ))}
+                </View>
+                <Image source={{ uri: item.image }} className="w-28 h-28" />
+              </LinearGradient>
+            </Link>
           </View>
         )}
       />
