@@ -1,12 +1,21 @@
-import { View, Text, Image, ActivityIndicator } from 'react-native'
+import { View, Text, Image, ActivityIndicator, Pressable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import gradientByType from '@/components/bgGradient';
 import { LinearGradient } from 'expo-linear-gradient';
+import About from '@/components/about';
+import BaseStats from '@/components/baseStats';
+import Evolution from '@/components/evolution';
+import Moves from '@/components/moves';
 
 const DetailsPage = () => {
     const [pokemon, setPokemon] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [view, setView] = useState(0);
+    const [abouts, setAbouts] = useState(null);
+    const [stats, setStats] = useState(null);
+    const [evolution, setEvolution] = useState(null);
+    const [moves, setMoves] = useState(null);
 
     const { id } = useLocalSearchParams();
 
@@ -20,28 +29,55 @@ const DetailsPage = () => {
         setLoading(true);
         try {
             const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-
-            if (!res.ok) {
-                throw new Error("Pokemon not found");
-            }
+            if (!res.ok) throw new Error("Pokemon not found");
 
             const data = await res.json();
 
-            const pokemonDetails = {
+            // BASIC INFO
+            setPokemon({
                 ids: data.id,
                 name: data.name,
                 image: data.sprites.other["official-artwork"].front_default,
                 types: data.types,
-            }
+            });
 
-            setPokemon(pokemonDetails);
+
+            const speciesRes = await fetch(data.species.url);
+            const speciesData = await speciesRes.json();
+
+            const specieRes = await speciesData.genera.find(g => g.language.name === "en")?.genus;
+            const eggres = await speciesData.egg_groups;
+            const eggs = await speciesData.hatch_counter;
+
+
+            // ABOUT
+            setAbouts({
+                abilities: data.abilities.map(a => a.ability.name),
+                height: data.height,
+                weight: data.weight,
+                species: specieRes,
+                eggGroup: eggres.map(egg => egg.name),
+                eggCycle: eggs,
+            });
+
+            // STATS & MOVES
+            setStats(data.stats);
+            setMoves(data.moves);
+
+            // EVOLUTION
+
+            const evoRes = await fetch(speciesData.evolution_chain.url);
+            const evoData = await evoRes.json();
+
+            setEvolution(evoData.chain);
 
         } catch (error) {
-            console.log(error)
+            console.log(error);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
     }
+
 
     if (loading) {
         return (
@@ -57,6 +93,9 @@ const DetailsPage = () => {
             gradientByType[pokemon.types[0].type.name] || ["#ccc", "#999"]
         );
     }
+
+
+
     // console.log(id)
     return (
         <>
@@ -90,13 +129,25 @@ const DetailsPage = () => {
 
                     <View className='rounded-t-2xl bg-white overflow-hidden'>
                         <View className='flex-row justify-evenly pt-10'>
-                            <Text className='font-semibold'>About</Text>
-                            <Text className='font-semibold'>Base Stats</Text>
-                            <Text className='font-semibold'>Evolution</Text>
-                            <Text className='font-semibold'>Moves</Text>
+                            <Pressable onPress={() => setView(0)}>
+                                <Text className={`${view === 0 ? 'border-b-2 border-blue-500 font-bold' : ''} pb-2`}>About</Text>
+                            </Pressable>
+                            <Pressable onPress={() => setView(1)}>
+                                <Text className={`${view === 1 ? 'border-b-2 border-blue-500 font-bold' : ''} pb-2`}>Base Stats</Text>
+                            </Pressable>
+                            <Pressable onPress={() => setView(2)}>
+                                <Text className={`${view === 2 ? 'border-b-2 border-blue-500 font-bold' : ''} pb-2`}>Evolution</Text>
+                            </Pressable>
+                            <Pressable onPress={() => setView(3)}>
+                                <Text className={`${view === 3 ? 'border-b-2 border-blue-500 font-bold' : ''} pb-2`}>Moves</Text>
+                            </Pressable>
                         </View>
 
 
+                        {view === 0 && <About data={abouts} />}
+                        {view === 1 && <BaseStats data={stats} />}
+                        {view === 2 && <Evolution data={evolution} />}
+                        {view === 3 && <Moves data={moves} />}
                     </View>
                 </LinearGradient>
             )}
