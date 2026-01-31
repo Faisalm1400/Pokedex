@@ -48,6 +48,7 @@ const DetailsPage = () => {
             const specieRes = await speciesData.genera.find(g => g.language.name === "en")?.genus;
             const eggres = await speciesData.egg_groups;
             const eggs = await speciesData.hatch_counter;
+            
 
 
             // ABOUT
@@ -61,7 +62,7 @@ const DetailsPage = () => {
             });
 
             // STATS & MOVES
-            setStats(data.stats);
+            setStats(data.stats.map(s=>s));
             setMoves(data.moves);
 
             // EVOLUTION
