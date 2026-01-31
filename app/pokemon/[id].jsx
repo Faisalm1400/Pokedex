@@ -48,7 +48,7 @@ const DetailsPage = () => {
             const specieRes = await speciesData.genera.find(g => g.language.name === "en")?.genus;
             const eggres = await speciesData.egg_groups;
             const eggs = await speciesData.hatch_counter;
-            
+
 
 
             // ABOUT
@@ -61,9 +61,33 @@ const DetailsPage = () => {
                 eggCycle: eggs,
             });
 
-            // STATS & MOVES
-            setStats(data.stats.map(s=>s));
-            setMoves(data.moves);
+            // STATS 
+            setStats(data.stats.map(s => s));
+
+
+
+            // MOVES
+            const pokemonMoves = await Promise.all(
+                data.moves.slice(0, 20).map(async (m) => {
+                    const moveRes = await fetch(m.move.url);
+                    const details = await moveRes.json()
+
+                    // console.log(details.type.name)
+
+                    return {
+                        name: m.move.name
+                            .split('-')
+                            .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+                            .join(' '),
+                        damage: details.damage_class.name,
+                        type: details.type.name,
+                    };
+                })
+            );
+
+            // console.log(pokemonMoves)
+
+            setMoves(pokemonMoves);
 
             // EVOLUTION
 
@@ -103,6 +127,7 @@ const DetailsPage = () => {
             {pokemon && (
                 <LinearGradient
                     colors={getBg(pokemon)}
+                    className='flex-1'
                 >
                     <View className='p-4'>
                         <View className='flex-row items-center justify-between'>
@@ -128,7 +153,7 @@ const DetailsPage = () => {
                         />
                     </View>
 
-                    <View className='rounded-t-2xl bg-white overflow-hidden'>
+                    <View className='flex-1 rounded-t-2xl bg-white overflow-hidden'>
                         <View className='flex-row justify-evenly pt-10'>
                             <Pressable onPress={() => setView(0)}>
                                 <Text className={`${view === 0 ? 'border-b-2 border-blue-500 font-bold' : ''} pb-2`}>About</Text>
