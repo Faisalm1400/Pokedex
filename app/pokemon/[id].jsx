@@ -121,19 +121,6 @@ const DetailsPage = () => {
                     const speciesRes = await fetch(url);
                     const speciesData = await speciesRes.json()
 
-
-
-                    // const defaultVariety = speciesData.varieties.find(v => v.is_default);
-
-                    // const pokemonRes = await fetch(defaultVariety.pokemon.url);
-                    // const pokemonData = await pokemonRes.json();
-
-                    // return {
-                    //     id: pokemonData.id,
-                    //     name: pokemonData.name,
-                    //     image: pokemonData.sprites.front_default,
-                    // };
-
                     const varietiesData = await Promise.all(
                         speciesData.varieties.map(async (v) => {
                             const pokemonRes = await fetch(v.pokemon.url);
@@ -142,7 +129,7 @@ const DetailsPage = () => {
                             return {
                                 id: pokemonData.id,
                                 name: pokemonData.name,
-                                image: pokemonData.sprites.front_default,
+                                image: pokemonData.sprites.other["official-artwork"].front_default,
                                 isDefault: v.is_default,
                                 url: v.pokemon.url,
                             };
@@ -231,12 +218,11 @@ const DetailsPage = () => {
                         </View>
 
 
-                        <ScrollView className="flex-1">
                             {view === 0 && <About data={abouts} />}
                             {view === 1 && <BaseStats data={stats} />}
                             {view === 2 && <Evolution data={evolution} />}
                             {view === 3 && <Moves data={moves} />}
-                        </ScrollView>
+                        
                     </View>
                 </LinearGradient>
             )}

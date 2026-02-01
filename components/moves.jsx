@@ -7,6 +7,7 @@ const Moves = ({ data }) => {
 
 
 
+
   return (
     <FlatList
       data={data}

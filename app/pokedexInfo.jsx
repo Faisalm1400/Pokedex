@@ -59,7 +59,7 @@ const PokedexInfo = () => {
       </View>
       <View className='justify-center items-center gap-4 my-8'>
         <Text className='text-gray-500'>Version 1.0.0</Text>
-        <Text className='text-gray-500'>© {new Date().getFullYear} Pokedex App</Text>
+        <Text className='text-gray-500'>© {new Date().getFullYear()} Pokedex App</Text>
         <Text className='text-gray-500'>© Developed by Faisal Rahman</Text>
       </View>
     </ScrollView>
