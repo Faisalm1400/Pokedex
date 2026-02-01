@@ -15,11 +15,11 @@ const statMap = {
 
 const BaseStats = ({ data }) => {
 
-  // console.log(data)
+  // console.log(data.stats)
 
   return (
     <View className='px-8 py-6'>
-      {data.map((s, index) => {
+      {data.stats.map((s, index) => {
         const statName = statMap[s.stat.name];
         const statValue = s.base_stat;
         const barWidth = `${(statValue / MAX_STAT) * 100}%`;
@@ -49,10 +49,9 @@ const BaseStats = ({ data }) => {
         )
       })}
 
-      <View>
-        <Text>Type defense</Text>
-        {/* TODO */}
-        <Text>The effectiveness of each type on {}</Text>
+      <View className='gap-2 mt-10'>
+        <Text className='font-semibold'>Type defense</Text>
+        <Text>The effectiveness of each type on {data.name }</Text>
       </View>
     </View>
   )

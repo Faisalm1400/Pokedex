@@ -1,4 +1,4 @@
-import { View, Text, Image, ActivityIndicator, Pressable } from 'react-native'
+import { View, Text, Image, ActivityIndicator, Pressable, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import gradientByType from '@/components/bgGradient';
@@ -62,7 +62,12 @@ const DetailsPage = () => {
             });
 
             // STATS 
-            setStats(data.stats.map(s => s));
+
+            const statsData= {
+                name: data.name,
+                stats: data.stats.map(s=>s),
+            }
+            setStats(statsData);
 
 
 
@@ -91,10 +96,66 @@ const DetailsPage = () => {
 
             // EVOLUTION
 
+            const parseEvolutionChain = (chain) => {
+                let result = [];
+
+                result.push(chain.species.url);
+
+                chain.evolves_to.forEach(next => {
+                    result = result.concat(parseEvolutionChain(next));
+                });
+
+                return result;
+            };
+
             const evoRes = await fetch(speciesData.evolution_chain.url);
             const evoData = await evoRes.json();
 
-            setEvolution(evoData.chain);
+            const evolutionList = parseEvolutionChain(evoData.chain);
+
+            // const evolutionCollection = evolutionList.map(e => e)
+
+            const evolution = await Promise.all(
+                evolutionList.map(async (url) => {
+                    // console.log(m)
+                    const speciesRes = await fetch(url);
+                    const speciesData = await speciesRes.json()
+
+
+
+                    // const defaultVariety = speciesData.varieties.find(v => v.is_default);
+
+                    // const pokemonRes = await fetch(defaultVariety.pokemon.url);
+                    // const pokemonData = await pokemonRes.json();
+
+                    // return {
+                    //     id: pokemonData.id,
+                    //     name: pokemonData.name,
+                    //     image: pokemonData.sprites.front_default,
+                    // };
+
+                    const varietiesData = await Promise.all(
+                        speciesData.varieties.map(async (v) => {
+                            const pokemonRes = await fetch(v.pokemon.url);
+                            const pokemonData = await pokemonRes.json();
+
+                            return {
+                                id: pokemonData.id,
+                                name: pokemonData.name,
+                                image: pokemonData.sprites.front_default,
+                                isDefault: v.is_default,
+                                url: v.pokemon.url,
+                            };
+                        })
+                    );
+
+                    return varietiesData;
+
+                })
+            );
+
+
+            setEvolution(evolution.flat());
 
         } catch (error) {
             console.log(error);
@@ -170,10 +231,12 @@ const DetailsPage = () => {
                         </View>
 
 
-                        {view === 0 && <About data={abouts} />}
-                        {view === 1 && <BaseStats data={stats} />}
-                        {view === 2 && <Evolution data={evolution} />}
-                        {view === 3 && <Moves data={moves} />}
+                        <ScrollView className="flex-1">
+                            {view === 0 && <About data={abouts} />}
+                            {view === 1 && <BaseStats data={stats} />}
+                            {view === 2 && <Evolution data={evolution} />}
+                            {view === 3 && <Moves data={moves} />}
+                        </ScrollView>
                     </View>
                 </LinearGradient>
             )}
