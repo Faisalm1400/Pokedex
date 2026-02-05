@@ -1,58 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { Text, TextInput, View, FlatList, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import gradientByType from "../components/bgGradient";
 import { Link } from "expo-router";
+import { AppContext } from "@/context/contextProvider";
 
 
 
 
 
 export default function Index() {
-  const [pokemons, setPokemons] = useState([]);
-  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    fetchPokemon();
-  }, [])
+  const { pokemons, getBg } = useContext(AppContext);
 
-  async function fetchPokemon() {
-    if (loading) return;
-    setLoading(true);
-
-    try {
-      const response = await fetch('https://pokeapi.co/api/v2/pokemon/?limit=10')
-      const data = await response.json();
-
-      const basicPokemons = await Promise.all(
-        data.results.map(async (p) => {
-          const detailRes = await fetch(p.url);
-          const details = await detailRes.json()
-
-          const pokemon = {
-            id: details.id,
-            name: details.name,
-            image: details.sprites.front_default,
-            types: details.types,
-          }
-          return pokemon;
-        })
-      );
-      setPokemons(basicPokemons)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setLoading(false);
-    }
-
-  }
-
-
-  function getBg(item) {
-    return (
-      gradientByType[item.types[0].type.name] || ["#ccc", "#999"]
-    );
-  }
 
 
   return (
@@ -67,14 +26,14 @@ export default function Index() {
         renderItem={({ item }) => (
           <View className="w-1/2 p-1">
             <Link href={{
-              pathname:'/pokemon/[id]',
-              params: {id: item.id}
+              pathname: '/pokemon/[id]',
+              params: { id: item.id }
             }}>
               <LinearGradient
                 colors={getBg(item)}
                 className="rounded-xl overflow-hidden p-4 flex-row items-center"
               >
-                <View>
+                <View className="">
                   <Text className="text-white font-bold">
                     #{item.id}
                   </Text>
@@ -91,7 +50,11 @@ export default function Index() {
                     </Text>
                   ))}
                 </View>
-                <Image source={{ uri: item.image }} className="w-28 h-28" />
+                <View className="h-28 w-28 items-center justify-center">
+                  <Image source={{ uri: item.image }}
+                    className="w-20 h-20"
+                    resizeMode="contain" />
+                </View>
               </LinearGradient>
             </Link>
           </View>

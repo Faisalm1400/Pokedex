@@ -1,14 +1,20 @@
-import { View, Text, Image, ActivityIndicator, Pressable, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useLocalSearchParams } from 'expo-router'
+import { View, Text, Image, ActivityIndicator, Pressable } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import gradientByType from '@/components/bgGradient';
 import { LinearGradient } from 'expo-linear-gradient';
 import About from '@/components/about';
 import BaseStats from '@/components/baseStats';
 import Evolution from '@/components/evolution';
 import Moves from '@/components/moves';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { FavoritesContext } from '@/context/favoritesContext';
 
 const DetailsPage = () => {
+
+    const { toggleFavorite, isFavorite } = useContext(FavoritesContext);
+
+
     const [pokemon, setPokemon] = useState(null);
     const [loading, setLoading] = useState(false);
     const [view, setView] = useState(0);
@@ -16,8 +22,12 @@ const DetailsPage = () => {
     const [stats, setStats] = useState(null);
     const [evolution, setEvolution] = useState(null);
     const [moves, setMoves] = useState(null);
+    // const [favorite, setFavorite] = useState(false);
+    const router = useRouter();
 
     const { id } = useLocalSearchParams();
+
+    // console.log(id)
 
     useEffect(() => {
         if (id) {
@@ -35,7 +45,7 @@ const DetailsPage = () => {
 
             // BASIC INFO
             setPokemon({
-                ids: data.id,
+                id: data.id,
                 name: data.name,
                 image: data.sprites.other["official-artwork"].front_default,
                 types: data.types,
@@ -63,9 +73,9 @@ const DetailsPage = () => {
 
             // STATS 
 
-            const statsData= {
+            const statsData = {
                 name: data.name,
-                stats: data.stats.map(s=>s),
+                stats: data.stats.map(s => s),
             }
             setStats(statsData);
 
@@ -160,12 +170,18 @@ const DetailsPage = () => {
         );
     }
 
+    // console.log(pokemon?.id)
+
 
     function getBg(pokemon) {
         return (
             gradientByType[pokemon.types[0].type.name] || ["#ccc", "#999"]
         );
     }
+
+
+
+
 
 
 
@@ -177,6 +193,21 @@ const DetailsPage = () => {
                     colors={getBg(pokemon)}
                     className='flex-1'
                 >
+                    <View className="flex-row justify-between items-center p-4">
+                        <Pressable onPress={() => router.back()}>
+                            <FontAwesome name="arrow-left" size={24} color="white" />
+                        </Pressable>
+
+                        <Pressable
+                            onPress={() => toggleFavorite(pokemon)}
+                        >
+                            <FontAwesome
+                                name={isFavorite(pokemon.id) ? "heart" : "heart-o"}
+                                size={24}
+                                color="white"
+                            />
+                        </Pressable>
+                    </View>
                     <View className='p-4'>
                         <View className='flex-row items-center justify-between'>
                             <View className='gap-2'>
@@ -192,7 +223,7 @@ const DetailsPage = () => {
                                     ))}
                                 </View>
                             </View>
-                            <Text className='text-white font-semibold text-lg'>#{pokemon.ids}</Text>
+                            <Text className='text-white font-semibold text-lg'>#{pokemon.id}</Text>
                         </View>
 
                         <Image
@@ -218,11 +249,12 @@ const DetailsPage = () => {
                         </View>
 
 
-                            {view === 0 && <About data={abouts} />}
-                            {view === 1 && <BaseStats data={stats} />}
-                            {view === 2 && <Evolution data={evolution} />}
-                            {view === 3 && <Moves data={moves} />}
-                        
+
+                        {view === 0 && <About data={abouts} />}
+                        {view === 1 && <BaseStats data={stats} />}
+                        {view === 2 && <Evolution data={evolution} />}
+                        {view === 3 && <Moves data={moves} />}
+
                     </View>
                 </LinearGradient>
             )}
@@ -230,4 +262,6 @@ const DetailsPage = () => {
     )
 }
 
-export default DetailsPage
+
+
+export default DetailsPage;

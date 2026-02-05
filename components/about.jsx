@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React from 'react'
 
 const About = ({ data }) => {
@@ -10,8 +10,8 @@ const About = ({ data }) => {
     const eggGroupName = eggGroup.map(e => e)
 
     return (
-        <View className='px-8 py-6'>
-            <View className='gap-5'>
+        <View className='py-8 px-6'>
+            <View className='gap-2'>
                 <View className='flex-row gap-9'>
                     <Text>Species:</Text>
                     <Text>{species}</Text>
@@ -32,7 +32,7 @@ const About = ({ data }) => {
             </View>
 
 
-            <View className='gap-5 mt-8'>
+            <View className='gap-2 mt-4'>
                 <Text className='text-xl font-semibold'>Breeding</Text>
                 <View className='flex-row gap-5'>
                     <Text>Egg Group:</Text>
