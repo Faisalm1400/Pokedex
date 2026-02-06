@@ -15,10 +15,10 @@ const Moves = ({ data }) => {
       contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 40 }}
       renderItem={({ item }) => (
         <View className="py-2 border-b border-gray-200">
-          <Text className="capitalize font-medium">
+          <Text className="capitalize font-medium dark:text-white">
             {item.name}
           </Text>
-          <Text className="text-xs text-gray-500 capitalize">
+          <Text className="text-xs text-gray-500 capitalize dark:text-white">
             {item.type} • {item.damage}
           </Text>
         </View>

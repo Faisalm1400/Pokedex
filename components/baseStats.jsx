@@ -29,12 +29,12 @@ const BaseStats = ({ data }) => {
           <View key={index} className="flex-row items-center gap-4">
 
             {/* Stat name */}
-            <Text className="w-24 text-gray-600 font-medium">
+            <Text className="w-24 text-gray-600 font-medium dark:text-white">
               {statName}
             </Text>
 
             {/* Stat value */}
-            <Text className="w-10 font-semibold">
+            <Text className="w-10 font-semibold dark:text-white">
               {statValue}
             </Text>
 
@@ -50,8 +50,8 @@ const BaseStats = ({ data }) => {
       })}
 
       <View className='gap-2 mt-10'>
-        <Text className='font-semibold'>Type defense</Text>
-        <Text>The effectiveness of each type on {data.name }</Text>
+        <Text className='font-semibold dark:text-white'>Type defense</Text>
+        <Text className='dark:text-white'>The effectiveness of each type on {data.name }</Text>
       </View>
     </View>
   )

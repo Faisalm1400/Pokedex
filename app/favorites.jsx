@@ -1,18 +1,27 @@
-import { View, Text, FlatList, Image } from 'react-native'
+import { View, Text, FlatList, Image, Pressable, StatusBar } from 'react-native'
 import React, { useContext } from 'react'
 import { FavoritesContext } from '@/context/favoritesContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AppContext } from '@/context/contextProvider';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const Favorites = () => {
     const { favorites } = useContext(FavoritesContext);
     const { getBg } = useContext(AppContext)
+
+    const { colorScheme } = useContext(AppContext);
     // console.log(favorites)
 
     return (
-        <View className='p-2'>
-            <Text className='text-xl font-bold mb-2'>{favorites.length} {favorites.length > 1 ? "favorites" : "favorite"}</Text>
+        <View className='p-2 dark:bg-neutral-900 h-full'>
+
+            <View className="flex-row justify-between items-center py-3">
+                <Pressable onPress={() => router.back()}>
+                    <FontAwesome name="arrow-left" size={24} color={colorScheme == "dark" ? "white" : "black"} />
+                </Pressable>
+            </View>
+            <Text className='text-xl font-bold mb-2 p-2 dark:text-white'>{favorites.length} {favorites.length > 1 ? "favorites" : "favorite"}</Text>
             <FlatList
                 data={favorites}
                 numColumns={2}

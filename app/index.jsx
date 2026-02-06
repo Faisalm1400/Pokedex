@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Text, TextInput, View, FlatList, Image } from "react-native";
+import { Text, TextInput, View, FlatList, Image, StatusBar } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import { AppContext } from "@/context/contextProvider";
@@ -10,14 +10,15 @@ import { AppContext } from "@/context/contextProvider";
 
 export default function Index() {
 
-  const { pokemons, getBg } = useContext(AppContext);
+  const { pokemons, getBg, colorScheme } = useContext(AppContext);
 
 
 
   return (
-    <View className="flex-1 p-2">
-      <Text className="text-2xl font-bold mb-2">Pokédex</Text>
-      <TextInput className="border border-gray-400 rounded-xl p-3 mb-2" placeholder="Search Pokémon" />
+    <View className="flex-1 p-2 dark:bg-neutral-900">
+      <StatusBar barStyle={colorScheme == 'dark' ? 'light' : 'dark'} />
+      <Text className="text-2xl font-bold mb-2 dark:text-white">Pokédex</Text>
+      <TextInput className="border border-gray-400 rounded-xl p-3 mb-2" placeholderTextColor={colorScheme == 'dark' ? "white" : "black"} placeholder="Search Pokémon" />
 
       <FlatList
         data={pokemons}

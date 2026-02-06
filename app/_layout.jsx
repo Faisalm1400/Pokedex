@@ -19,9 +19,10 @@ export default function RootLayout() {
               title: 'Pokémon'
             }}
           />
-          <Drawer.Screen name='pokedexInfo' options={{ title: 'Pokédex Info' }} />
-          <Drawer.Screen name='pokemon/[id]' options={{ title: 'Pokémon Details', drawerItemStyle: { display: "none" } }} />
           <Drawer.Screen name='favorites' options={{ title: 'Favorites' }} />
+          <Drawer.Screen name='pokedexInfo' options={{ title: 'Pokédex Info' }} />
+          <Drawer.Screen name='settings' options={{ title: 'Settings' }} />
+          <Drawer.Screen name='pokemon/[id]' options={{ title: 'Pokémon Details', drawerItemStyle: { display: "none" } }} />
         </Drawer>
       </FavoritesContextProvider>
     </AppContextProvider>

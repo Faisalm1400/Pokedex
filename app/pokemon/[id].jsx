@@ -232,19 +232,19 @@ const DetailsPage = () => {
                         />
                     </View>
 
-                    <View className='flex-1 rounded-t-2xl bg-white overflow-hidden'>
+                    <View className='flex-1 rounded-t-2xl bg-white overflow-hidden dark:bg-neutral-900'>
                         <View className='flex-row justify-evenly pt-10'>
                             <Pressable onPress={() => setView(0)}>
-                                <Text className={`${view === 0 ? 'border-b-2 border-blue-500 font-bold' : ''} pb-2`}>About</Text>
+                                <Text className={`${view === 0 ? 'border-b-2 border-blue-500 font-bold' : ''}dark:text-white pb-2`}>About</Text>
                             </Pressable>
                             <Pressable onPress={() => setView(1)}>
-                                <Text className={`${view === 1 ? 'border-b-2 border-blue-500 font-bold' : ''} pb-2`}>Base Stats</Text>
+                                <Text className={`${view === 1 ? 'border-b-2 border-blue-500 font-bold' : ''}dark:text-white pb-2`}>Base Stats</Text>
                             </Pressable>
                             <Pressable onPress={() => setView(2)}>
-                                <Text className={`${view === 2 ? 'border-b-2 border-blue-500 font-bold' : ''} pb-2`}>Evolution</Text>
+                                <Text className={`${view === 2 ? 'border-b-2 border-blue-500 font-bold' : ''}dark:text-white pb-2`}>Evolution</Text>
                             </Pressable>
                             <Pressable onPress={() => setView(3)}>
-                                <Text className={`${view === 3 ? 'border-b-2 border-blue-500 font-bold' : ''} pb-2`}>Moves</Text>
+                                <Text className={`${view === 3 ? 'border-b-2 border-blue-500 font-bold' : ''}dark:text-white pb-2`}>Moves</Text>
                             </Pressable>
                         </View>
 

@@ -1,5 +1,6 @@
 import gradientByType from "@/components/bgGradient";
 import { createContext, useEffect, useState } from "react";
+import { useColorScheme } from "nativewind";
 
 export const AppContext = createContext();
 
@@ -8,6 +9,8 @@ const AppContextProvider = ({ children }) => {
 
     const [pokemons, setPokemons] = useState([]);
     const [loading, setLoading] = useState(false);
+
+    const { colorScheme, toggleColorScheme } = useColorScheme();
 
     useEffect(() => {
         fetchPokemon();
@@ -53,10 +56,11 @@ const AppContextProvider = ({ children }) => {
 
 
 
-
     const contextInfo = {
         pokemons,
         getBg,
+        colorScheme,
+        toggleColorScheme,
     }
 
     return (
