@@ -194,7 +194,7 @@ const DetailsPage = () => {
                     className='flex-1'
                 >
                     <View className="flex-row justify-between items-center p-4">
-                        <Pressable onPress={() => router.back()}>
+                        <Pressable onPress={() => router.back("/")}>
                             <FontAwesome name="arrow-left" size={24} color="white" />
                         </Pressable>
 

@@ -17,7 +17,7 @@ const Favorites = () => {
         <View className='p-2 dark:bg-neutral-900 h-full'>
 
             <View className="flex-row justify-between items-center py-3">
-                <Pressable onPress={() => router.back()}>
+                <Pressable onPress={() => router.back("/")}>
                     <FontAwesome name="arrow-left" size={24} color={colorScheme == "dark" ? "white" : "black"} />
                 </Pressable>
             </View>

@@ -16,7 +16,7 @@ const PokedexInfo = () => {
 
 
       <View className="flex-row justify-between items-center py-5">
-        <Pressable onPress={() => router.back()}>
+        <Pressable onPress={() => router.back("/")}>
           <FontAwesome name="arrow-left" size={24} color={colorScheme == 'dark' ? "white" : "black"} />
         </Pressable>
       </View>

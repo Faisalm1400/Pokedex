@@ -16,7 +16,7 @@ const Settings = () => {
         <View className='p-4 gap-10 dark:bg-neutral-900 h-full'>
             <StatusBar barStyle={colorScheme == 'dark' ? 'light' : 'dark'} />
             <View className="flex-row justify-between items-center">
-                <Pressable onPress={() => router.back()}>
+                <Pressable onPress={() => router.back("/")}>
                     <FontAwesome name="arrow-left" size={24} color={colorScheme=='dark'?"white":"black"} />
                 </Pressable>
             </View>
