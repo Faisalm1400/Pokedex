@@ -10,7 +10,7 @@ import { AppContext } from "@/context/contextProvider";
 
 export default function Index() {
 
-  const { pokemons, getBg, colorScheme } = useContext(AppContext);
+  const { dataToShow, getBg, colorScheme,search,setSearch } = useContext(AppContext);
 
 
 
@@ -18,10 +18,15 @@ export default function Index() {
     <View className="flex-1 p-2 dark:bg-neutral-900">
       <StatusBar barStyle={colorScheme == 'dark' ? 'light' : 'dark'} />
       <Text className="text-2xl font-bold mb-2 dark:text-white">Pokédex</Text>
-      <TextInput className="border border-gray-400 rounded-xl p-3 mb-2" placeholderTextColor={colorScheme == 'dark' ? "white" : "black"} placeholder="Search Pokémon" />
+      <TextInput 
+      value={search}
+      onChangeText={setSearch}
+      className="border border-gray-400 rounded-xl p-3 mb-2" 
+      placeholderTextColor={colorScheme == 'dark' ? "white" : "black"} 
+      placeholder="Search Pokémon" />
 
       <FlatList
-        data={pokemons}
+        data={dataToShow}
         numColumns={2}
         keyExtractor={(item) => item.name}
         renderItem={({ item }) => (

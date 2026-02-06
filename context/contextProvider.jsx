@@ -5,12 +5,29 @@ import { useColorScheme } from "nativewind";
 export const AppContext = createContext();
 
 
+
 const AppContextProvider = ({ children }) => {
 
     const [pokemons, setPokemons] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [search, setSearch] = useState("");
+    const [searchResult, setSearchResult] = useState(null);
 
     const { colorScheme, toggleColorScheme } = useColorScheme();
+
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            if (!search) {
+                setSearchResult(null);
+                return
+            } else {
+                searchPokemon(search)
+            }
+        }, 400);
+
+        return () => clearTimeout(timeout);
+    }, [search])
 
     useEffect(() => {
         fetchPokemon();
@@ -48,6 +65,31 @@ const AppContextProvider = ({ children }) => {
     }
 
 
+    const searchPokemon = async (name) => {
+        try {
+            const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`)
+            const data = await res.json();
+
+
+            setSearchResult([
+                {
+                    id: data.id,
+                    name: data.name,
+                    image: data.sprites.other["official-artwork"].front_default,
+                    types: data.types,
+                },
+            ]);
+
+
+        } catch {
+            setSearchResult(null)
+        }
+    }
+
+
+    const dataToShow = searchResult ? searchResult : pokemons;
+
+
     function getBg(item) {
         return (
             gradientByType[item.types[0].type.name] || ["#ccc", "#999"]
@@ -57,10 +99,12 @@ const AppContextProvider = ({ children }) => {
 
 
     const contextInfo = {
-        pokemons,
+        dataToShow,
         getBg,
         colorScheme,
         toggleColorScheme,
+        search,
+        setSearch,
     }
 
     return (
