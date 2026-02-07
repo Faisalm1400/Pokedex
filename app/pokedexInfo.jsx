@@ -12,12 +12,12 @@ const PokedexInfo = () => {
 
   return (
     <ScrollView className='px-5 dark:bg-neutral-900'>
-      <StatusBar barStyle={colorScheme == 'dark' ? 'light' : 'dark'} />
+      <StatusBar barStyle={colorScheme === 'dark' ? 'light' : 'dark'} />
 
 
       <View className="flex-row justify-between items-center py-5">
         <Pressable onPress={() => router.back("/")}>
-          <FontAwesome name="arrow-left" size={24} color={colorScheme == 'dark' ? "white" : "black"} />
+          <FontAwesome name="arrow-left" size={24} color={colorScheme === 'dark' ? "white" : "black"} />
         </Pressable>
       </View>
 

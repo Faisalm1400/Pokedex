@@ -11,23 +11,23 @@ import Feather from "@expo/vector-icons/Feather";
 
 export default function Index() {
 
-  const { dataToShow, getBg, colorScheme, search, setSearch, fetchPokemon, loading } = useContext(AppContext);
+  const { dataToShow, getBg,colorScheme, search, setSearch, fetchPokemon, loading } = useContext(AppContext);
 
 
 
   return (
     <View className="flex-1 p-2 dark:bg-neutral-900">
-      <StatusBar barStyle={colorScheme == 'dark' ? 'light' : 'dark'} />
+      <StatusBar barStyle={colorScheme === 'dark' ? 'light' : 'dark'} />
       <Text className="text-2xl font-bold mb-2 dark:text-white">Pokédex</Text>
       <View className="relative">
         <TextInput
           value={search}
           onChangeText={setSearch}
-          className="border border-gray-400 rounded-xl p-3 mb-2"
-          placeholderTextColor={colorScheme == 'dark' ? "white" : "black"}
+          className="border border-gray-400 rounded-xl p-3 mb-2 dark:text-white"
+          placeholderTextColor={colorScheme === 'dark' ? "white" : "black"}
           placeholder="Search Pokémon" />
         <Pressable className="absolute right-3 top-3" onPress={() => setSearch("")}>
-          <Feather name="x" size={20} color="black" />
+          <Feather name="x" size={20} color={colorScheme === "dark" ? "white" : "black"} />
         </Pressable>
       </View>
 

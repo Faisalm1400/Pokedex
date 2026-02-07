@@ -2,7 +2,7 @@ import { View, Text, Switch, StatusBar, Pressable } from 'react-native'
 import React, { useContext } from 'react'
 import Feather from '@expo/vector-icons/Feather';
 import { AppContext } from '@/context/contextProvider';
-import { router } from 'expo-router';
+import { Link, router } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const Settings = () => {
@@ -14,10 +14,10 @@ const Settings = () => {
 
     return (
         <View className='p-4 gap-10 dark:bg-neutral-900 h-full'>
-            <StatusBar barStyle={colorScheme == 'dark' ? 'light' : 'dark'} />
+            <StatusBar barStyle={colorScheme === 'dark' ? 'light' : 'dark'} />
             <View className="flex-row justify-between items-center">
                 <Pressable onPress={() => router.back("/")}>
-                    <FontAwesome name="arrow-left" size={24} color={colorScheme=='dark'?"white":"black"} />
+                    <FontAwesome name="arrow-left" size={24} color={colorScheme == 'dark' ? "white" : "black"} />
                 </Pressable>
             </View>
             <View className='bg-gray-200 p-8 rounded-2xl gap-3'>
@@ -46,7 +46,12 @@ const Settings = () => {
             <View className='gap-3'>
                 <Text className='text-xl uppercase text-gray-500 dark:text-white'>About</Text>
                 <View className='border border-collapse rounded-xl overflow-hidden dark:border-white'>
-                    <Text className='dark:text-white border-b dark:border-white py-5 px-3 border-collapse'>Terms of Service</Text>
+                    <View className='border-b dark:border-white py-5 px-3'>
+                        <Link href={'/contact'}>
+                            <Text className='dark:text-white'>Contact Us</Text>
+                        </Link>
+                    </View>
+                    <Text className='dark:text-white border-b dark:border-white py-5 px-3'>Terms of Service</Text>
                     <Text className='dark:text-white border-b dark:border-white py-5 px-3'>Privacy Policy</Text>
                     <View className='p-3'>
                         <Text className='dark:text-white'>App Version</Text>
