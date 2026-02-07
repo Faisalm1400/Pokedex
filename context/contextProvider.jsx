@@ -1,10 +1,10 @@
 import gradientByType from "@/components/bgGradient";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import { useColorScheme } from "nativewind";
 
 export const AppContext = createContext();
 
-
+const PAGE_SIZE = 30;
 
 const AppContextProvider = ({ children }) => {
 
@@ -12,13 +12,18 @@ const AppContextProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState(null);
+    const [page, setPage] = useState(0);
+
 
     const { colorScheme, toggleColorScheme } = useColorScheme();
+
+    const fetchingRef = useRef(false);
+    const cacheRef = useRef({});
 
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            if (!search) {
+            if (!search.trim()) {
                 setSearchResult(null);
                 return
             } else {
@@ -34,11 +39,13 @@ const AppContextProvider = ({ children }) => {
     }, [])
 
     async function fetchPokemon() {
-        if (loading) return;
+        if (fetchingRef.current) return;
+        fetchingRef.current = true;
         setLoading(true);
 
         try {
-            const response = await fetch('https://pokeapi.co/api/v2/pokemon/?limit=10')
+            const offset = page * PAGE_SIZE
+            const response = await fetch(`https://pokeapi.co/api/v2/pokemon/?limit=${PAGE_SIZE}&offset=${offset}`)
             const data = await response.json();
 
             const basicPokemons = await Promise.all(
@@ -55,19 +62,28 @@ const AppContextProvider = ({ children }) => {
                     return pokemon;
                 })
             );
-            setPokemons(basicPokemons)
+            setPokemons((prev) => [...prev, ...basicPokemons]);
+            setPage((prev) => prev + 1);
         } catch (error) {
             console.log(error)
         } finally {
             setLoading(false);
+            fetchingRef.current = false;
         }
 
     }
 
 
     const searchPokemon = async (name) => {
+        const key = name.toLowerCase();
+
+        // hit cache
+        if (cacheRef.current[key]) {
+            setSearchResult(cacheRef.current[key]);
+            return;
+        }
         try {
-            const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`)
+            const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${key}`)
             const data = await res.json();
 
 
@@ -82,7 +98,7 @@ const AppContextProvider = ({ children }) => {
 
 
         } catch {
-            setSearchResult(null)
+            setSearchResult([])
         }
     }
 
@@ -105,6 +121,8 @@ const AppContextProvider = ({ children }) => {
         toggleColorScheme,
         search,
         setSearch,
+        fetchPokemon,
+        loading,
     }
 
     return (

@@ -1,8 +1,9 @@
 import { useContext } from "react";
-import { Text, TextInput, View, FlatList, Image, StatusBar } from "react-native";
+import { Text, TextInput, View, FlatList, Image, StatusBar, ActivityIndicator, Pressable } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import { AppContext } from "@/context/contextProvider";
+import Feather from "@expo/vector-icons/Feather";
 
 
 
@@ -10,7 +11,7 @@ import { AppContext } from "@/context/contextProvider";
 
 export default function Index() {
 
-  const { dataToShow, getBg, colorScheme,search,setSearch } = useContext(AppContext);
+  const { dataToShow, getBg, colorScheme, search, setSearch, fetchPokemon, loading } = useContext(AppContext);
 
 
 
@@ -18,17 +19,27 @@ export default function Index() {
     <View className="flex-1 p-2 dark:bg-neutral-900">
       <StatusBar barStyle={colorScheme == 'dark' ? 'light' : 'dark'} />
       <Text className="text-2xl font-bold mb-2 dark:text-white">Pokédex</Text>
-      <TextInput 
-      value={search}
-      onChangeText={setSearch}
-      className="border border-gray-400 rounded-xl p-3 mb-2" 
-      placeholderTextColor={colorScheme == 'dark' ? "white" : "black"} 
-      placeholder="Search Pokémon" />
+      <View className="relative">
+        <TextInput
+          value={search}
+          onChangeText={setSearch}
+          className="border border-gray-400 rounded-xl p-3 mb-2"
+          placeholderTextColor={colorScheme == 'dark' ? "white" : "black"}
+          placeholder="Search Pokémon" />
+        <Pressable className="absolute right-3 top-3" onPress={() => setSearch("")}>
+          <Feather name="x" size={20} color="black" />
+        </Pressable>
+      </View>
 
       <FlatList
         data={dataToShow}
         numColumns={2}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item) => item.id}
+        onEndReached={fetchPokemon}
+        onEndReachedThreshold={0.5}
+        ListFooterComponent={
+          loading ? <ActivityIndicator size={"large"} /> : null
+        }
         renderItem={({ item }) => (
           <View className="w-1/2 p-1">
             <Link href={{
